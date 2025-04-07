@@ -55,3 +55,33 @@ spec:
       - CreateNamespace=true
       - PruneLast=true
       - RespectIgnoreDifferences=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prd-coin-coin-hasan
+  namespace: argocd
+spec:
+  destination:
+    namespace: prd-coin-coin-hasan-ns
+    name: gke_ajaib-prd-coin_asia-southeast2_prd-coin-cluster-0
+  project: coin
+  source:
+    path: app/production/prd-coin/COIN-HASAN
+    repoURL: https://github.com/ajaibid/infra-k8s-app-manifest
+    targetRevision: HEAD
+  ignoreDifferences:
+    - group: flagger.app
+      kind: Canary
+      jsonPointers:
+        - /spec/analysis/maxWeight
+        - /spec/skipAnalysis
+  syncPolicy:
+    managedNamespaceMetadata:
+      labels:
+        istio-injection: enabled
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
+      - RespectIgnoreDifferences=true

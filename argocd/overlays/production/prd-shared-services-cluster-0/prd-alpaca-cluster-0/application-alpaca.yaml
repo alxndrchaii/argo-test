@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prd-service-dependencies-prd-alpaca-cluster-0
+  namespace: argocd
+spec:
+  destination:
+    name: gke_ajaib-prd-alpaca_asia-southeast2_ajaib-prd-alpaca-cluster-0
+  project: default
+  source:
+    path: app/production/prd-alpaca/dependencies
+    repoURL: https://github.com/ajaibid/infra-k8s-app-manifest
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ApplyOutOfSyncOnly=true
